@@ -2,58 +2,455 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>BaiWo 白沃 | 个人主页 - 生物信息 · 动漫 · 创意开发</title>
-
-<!-- 基础 SEO -->
-<meta name="description" content="白沃（BaiWo）的个人主页，上海海洋大学学生，探索生物信息学、智能体构建与百合动漫的交叉世界。">
-<meta name="keywords" content="白沃,BaiWo,baiwoo,个人主页,生物信息,智能体,百合动漫,上海海洋大学">
-<meta name="author" content="白沃 BaiWo">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://baiwoo.xyz/">
-
-<!-- Favicon -->
-<link rel="icon" type="image/svg+xml" href="/assets/favicon-V1JHVAAX.svg">
-<link rel="icon" type="image/png" sizes="64x64" href="/assets/favicon-BygqkF3f.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon-DaIVnUWY.png">
-<meta name="theme-color" content="#FFB6C1">
-
-<!-- Open Graph -->
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="BaiWo 白沃">
-<meta property="og:title" content="BaiWo 白沃 | 个人主页">
-<meta property="og:description" content="上海海洋大学学生，探索生物信息学、智能体构建与百合动漫的交叉世界。">
-<meta property="og:url" content="https://baiwoo.xyz/">
-<meta property="og:image" content="https://baiwoo.xyz/image/og-cover.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:locale" content="zh_CN">
-
-<!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="BaiWo 白沃 | 个人主页">
-<meta name="twitter:description" content="上海海洋大学学生，探索生物信息学、智能体构建与百合动漫的交叉世界。">
-<meta name="twitter:image" content="https://baiwoo.xyz/image/og-cover.png">
-
-<!-- JSON-LD 结构化数据 -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "白沃",
-  "alternateName": "BaiWo",
-  "url": "https://baiwoo.xyz/",
-  "description": "上海海洋大学学生，专注于生物信息学、智能体构建，热爱百合动漫与游戏。",
-  "knowsAbout": ["生物信息学", "智能体", "动漫", "游戏开发"],
-  "alumniOf": {
-    "@type": "CollegeOrUniversity",
-    "name": "上海海洋大学"
-  },
-  "sameAs": []
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BaiWo</title>
+<style>
+  @font-face{
+  font-family:'Klondike';src:url('typeface/Klondike-Bold.ttf') format('truetype');
+  font-weight:700;font-style:normal;font-display:swap;
 }
-</script>
-  <script type="module" crossorigin src="/assets/index-C0X9nZCA.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-D2xdUB33.css">
+@font-face{
+  font-family:'Nagino';src:url('typeface/nagino.otf') format('opentype');
+  font-weight:700;font-style:normal;font-display:swap;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{
+  width:100%;height:100%;overflow:hidden;
+  font-family:'Klondike','Courier New',monospace;
+  background:#fff;
+  background-image:
+    radial-gradient(ellipse 60% 55% at 15% 25%, rgba(255,220,230,.55) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 50% at 80% 15%, rgba(255,230,238,.45) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 60% at 70% 70%, rgba(255,215,225,.5) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 45% at 25% 80%, rgba(255,228,235,.4) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 40% at 50% 50%, rgba(255,240,245,.35) 0%, transparent 50%),
+    radial-gradient(ellipse 35% 50% at 90% 50%, rgba(255,222,232,.4) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 35% at 10% 55%, rgba(255,235,240,.3) 0%, transparent 50%);
+  background-attachment:fixed;
+}
+
+/* ===== 预加载遮罩 ===== */
+#preload-overlay{
+  position:fixed;inset:0;z-index:99999;
+  background:#fff;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity .6s ease;
+}
+#preload-overlay.done{opacity:0;pointer-events:none}
+#preload-bar-wrap{
+  width:200px;height:4px;
+  background:rgba(200,200,205,.3);border-radius:2px;
+  overflow:hidden;margin-top:16px;
+}
+#preload-bar{
+  width:0%;height:100%;border-radius:2px;
+  background:linear-gradient(90deg,#87CEEB,#FFB6C1,#FFA500);
+  transition:width .3s ease;
+}
+#preload-text{
+  font-family:'Klondike',monospace;font-size:1.2rem;font-weight:700;
+  color:rgba(80,60,70,.5);
+}
+
+/* ===== 第一屏 ===== */
+#hero{
+  position:fixed;inset:0;
+  z-index:100;
+  transition:transform .9s cubic-bezier(.25,1.2,.35,1),opacity .6s ease;
+}
+#hero.out{
+  transform:translateY(-100vh);opacity:0;pointer-events:none;
+}
+
+#hero-shapes-canvas{
+  position:absolute;inset:0;z-index:0;pointer-events:none;
+}
+
+#typing-wrap{
+  position:absolute;top:38%;left:0;right:0;
+  text-align:center;
+}
+#typing-text{
+  font-family:'Klondike',monospace;font-size:5rem;font-weight:700;
+  white-space:nowrap;
+}
+#typing-cursor{
+  display:inline-block;width:4px;height:3.6rem;
+  background:#333;vertical-align:baseline;
+  animation:blink-cursor .6s step-end infinite;
+}
+@keyframes blink-cursor{50%{opacity:0}}
+
+#scroll-hint{
+  position:absolute;bottom:90px;left:0;right:0;
+  text-align:center;
+  font-family:'Klondike',monospace;
+  color:rgba(80,60,70,.35);font-size:1.8rem;font-weight:700;letter-spacing:2px;
+  animation:hint-float 2.5s ease-in-out infinite;
+}
+@keyframes hint-float{0%,100%{transform:translateY(0);opacity:.35}50%{transform:translateY(8px);opacity:.6}}
+
+/* ===== 第二屏 ===== */
+#main-section{
+  position:fixed;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  z-index:50;
+  transform:translateY(100vh);opacity:0;pointer-events:none;
+  transition:transform .9s cubic-bezier(.25,1.2,.35,1),opacity .6s ease;
+}
+#main-section.in{
+  transform:translateY(0);opacity:1;pointer-events:auto;
+}
+
+/* ===== 角色展示区 ===== */
+.char-zone{
+  position:absolute;bottom:-110%;z-index:5;
+  width:20%;height:100%;
+  overflow:hidden;
+  transition:bottom 1.2s cubic-bezier(.22,1,.36,1),transform .8s ease;
+}
+#zone-left{left:0}
+#zone-right{right:0}
+.char-zone.slide-in{bottom:0}
+.char-zone.shrink{transform:scale(.92)}
+
+.char-img{
+  position:relative;z-index:15;
+  width:100%;height:100%;
+  object-fit:contain;
+  transition:transform .4s cubic-bezier(.25,1,.5,1);
+}
+
+/* ===== 斜向字幕条 ===== */
+.marquee-strip{
+  position:absolute;z-index:10;
+  width:180%;height:36px;
+  overflow:hidden;white-space:nowrap;
+  opacity:0;
+  transition:opacity .8s ease;
+}
+.marquee-strip.show{opacity:1}
+
+#zone-left .marquee-strip:nth-child(2){
+  top:18%;left:-20%;
+  transform:rotate(-6deg);
+  background:rgba(200,200,205,.15);
+}
+#zone-left .marquee-strip:nth-child(3){
+  top:68%;left:-20%;
+  transform:rotate(-6deg);
+  background:rgba(200,200,205,.12);
+}
+#zone-right .marquee-strip:nth-child(2){
+  top:18%;left:-20%;
+  transform:rotate(-6deg);
+  background:rgba(200,200,205,.15);
+}
+#zone-right .marquee-strip:nth-child(3){
+  top:68%;left:-20%;
+  transform:rotate(-6deg);
+  background:rgba(200,200,205,.12);
+}
+
+.marquee-inner{
+  display:inline-block;
+  font-family:'Klondike',monospace;
+  font-size:1.3rem;font-weight:700;
+  color:rgba(120,115,130,.55);
+  letter-spacing:5px;
+  animation:marquee-scroll 32s linear infinite;
+  padding-left:100%;
+}
+@keyframes marquee-scroll{
+  0%{transform:translateX(0)}
+  100%{transform:translateX(-100%)}
+}
+
+#bottle-layer{
+  position:fixed;inset:0;z-index:40;pointer-events:none;
+}
+.bottle-img{
+  position:absolute;
+  height:80px;
+  pointer-events:none;
+  will-change:transform;
+}
+
+#scroll-hint-p2{
+  position:fixed;top:0;left:0;
+  font-family:'Klondike',monospace;
+  color:rgba(80,60,70,.35);font-size:1.8rem;font-weight:700;letter-spacing:2px;
+  pointer-events:none;
+  will-change:transform;
+  opacity:0;
+  transition:opacity .8s ease;
+  z-index:45;
+}
+#scroll-hint-p2.show{opacity:1}
+
+#main-content{
+  position:absolute;top:10%;left:50%;transform:translateX(-50%);
+  z-index:20;
+  width:62%;min-width:400px;max-width:1260px;
+  background:url('image/tietie.png') center/cover no-repeat;
+  background-color:rgba(255, 255, 255, 0.795);
+  background-blend-mode:overlay;
+  border:none;
+  border-radius:0;padding:0;
+  opacity:0;transition:opacity .8s ease;
+}
+#main-content.visible{opacity:1}
+
+#pixel-title{
+  display:flex;justify-content:center;gap:6px;
+  padding:28px 0 20px 0;flex-wrap:wrap;
+  position:relative;
+}
+.pixel-letter{display:flex;flex-direction:column;gap:4px;align-items:center}
+.pixel-block{
+  width:14px;height:14px;border-radius:2px;
+  animation:pixel-glow 2s ease-in-out infinite alternate;
+  position:relative;
+  will-change:transform;
+}
+@keyframes pixel-glow{0%{filter:brightness(1)}100%{filter:brightness(1.4)}}
+
+/* ===== 第三屏：爱好与工作 ===== */
+#page3{
+  position:fixed;inset:0;
+  z-index:40;
+  transform:translateY(100vh);opacity:0;pointer-events:none;
+  transition:transform .9s cubic-bezier(.25,1.2,.35,1),opacity .6s ease;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+#page3.in{transform:translateY(0);opacity:1;pointer-events:auto}
+
+#dynamic-page{
+  position:fixed;inset:0;
+  z-index:40;
+  transform:translateY(100vh);opacity:0;pointer-events:none;
+  transition:transform .9s cubic-bezier(.25,1.2,.35,1),opacity .6s ease;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.6);
+  backdrop-filter:blur(10px);
+}
+#dynamic-page.in{transform:translateY(0);opacity:1;pointer-events:auto}
+
+.dyn-content{
+  width:62%;max-width:860px;min-width:380px;
+  max-height:80vh;overflow-y:auto;
+  padding:32px 28px;
+}
+.dyn-title{
+  font-family:'Klondike',monospace;font-size:2rem;font-weight:700;
+  color:#333;margin-bottom:20px;
+}
+.dyn-subtitle{
+  font-family:'Klondike',monospace;font-size:1rem;font-weight:700;
+  color:rgba(60,60,60,.6);margin:20px 0 10px;
+}
+
+.tabs-container{
+  position:relative;
+  width:70%;max-width:900px;height:60vh;
+  perspective:1200px;
+  display:flex;
+}
+.tab-chars{
+  position:absolute;
+  left:-28%;top:-10%;bottom:-10%;
+  width:42%;height:120%;
+  flex-shrink:0;
+}
+.tab-char-wrap{
+  position:absolute;inset:0;
+  opacity:0;
+  transition:opacity .5s ease,transform .5s cubic-bezier(.25,1,.5,1);
+  transform:translateX(-20px);
+  pointer-events:none;
+}
+.tab-char-wrap.show{
+  opacity:1;
+  transform:translateX(0);
+  pointer-events:auto;
+}
+.tab-char-img{
+  position:relative;z-index:2;
+  width:100%;height:100%;
+  object-fit:contain;
+}
+.tab-char-name{
+  position:absolute;z-index:1;
+  top:10%;left:0;right:0;
+  transform:rotate(-30deg);
+  overflow:hidden;
+  white-space:nowrap;
+  pointer-events:none;
+}
+.tab-char-scroll{
+  display:inline-block;
+  font-family:'Nagino',monospace;
+  font-size:4rem;font-weight:700;
+  letter-spacing:10px;
+  padding-left:100%;
+  animation:char-scroll 28s linear infinite;
+}
+@keyframes char-scroll{
+  0%{transform:translateX(0)}
+  100%{transform:translateX(-100%)}
+}
+.tab-content{
+  flex:1;padding:32px 28px;display:flex;flex-direction:column;
+}
+.tab-title{
+  font-family:'Klondike',monospace;font-size:2rem;font-weight:700;
+  color:#333;margin-bottom:16px;
+}
+.tab-body{
+  flex:1;font-family:'Klondike',monospace;font-size:1.1rem;
+  color:rgba(60,60,60,.7);line-height:1.8;
+  overflow-y:auto;max-height:38vh;
+}
+
+.repo-card{
+  display:block;padding:8px 6px;margin-bottom:6px;
+  border-radius:8px;background:rgba(0,0,0,.03);
+  text-decoration:none;color:inherit;
+  transition:background .2s ease,transform .2s ease;
+}
+.repo-card:hover{
+  background:rgba(0,0,0,.06);transform:translateX(4px);
+}
+.repo-card .rname{
+  font-weight:700;color:#333;font-size:.95rem;
+  display:flex;align-items:center;gap:8px;
+}
+.repo-card .rlang{
+  font-size:.65rem;color:#fff;
+  padding:1px 8px;border-radius:10px;
+}
+.repo-card .rdesc{
+  font-size:.78rem;color:rgba(60,60,60,.5);
+  margin-top:3px;overflow:hidden;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+}
+.repo-card .rupdated{
+  font-size:.65rem;color:rgba(60,60,60,.35);margin-top:2px;
+}
+
+.gh-profile{
+  display:flex;align-items:center;gap:14px;margin-bottom:16px;
+  padding:10px 12px;border-radius:10px;background:rgba(0,0,0,.03);
+}
+.gh-avatar{
+  width:44px;height:44px;border-radius:50%;
+  border:2px solid rgba(0,0,0,.08);
+}
+.gh-info{line-height:1.4}
+.gh-name{font-weight:700;color:#333;font-size:1rem}
+.gh-bio{font-size:.72rem;color:rgba(60,60,60,.45)}
+
+.tab-dots{
+  display:flex;gap:16px;margin-top:24px;
+}
+.tab-dot{
+  width:16px;height:16px;border-radius:50%;
+  cursor:pointer;opacity:.4;
+  transition:opacity .3s ease,transform .3s ease;
+  border:2px solid rgba(0,0,0,.1);
+}
+.tab-dot.active{opacity:1;transform:scale(1.3)}
+.tab-dot:hover{opacity:.8;transform:scale(1.15)}
+
+.anim-star{
+  position:absolute;z-index:50;
+  font-size:18px;pointer-events:none;
+  will-change:transform,opacity;
+}
+.anim-heart{
+  position:absolute;z-index:50;
+  font-size:24px;pointer-events:none;
+  will-change:transform,opacity;
+}
+.tab-card{
+  position:absolute;
+  top:0;bottom:0;left:30%;right:0;
+  border-radius:18px;overflow:hidden;
+  background:rgba(255,255,255,.88);
+  border:1px solid rgba(0,0,0,.06);
+  box-shadow:0 4px 24px rgba(0,0,0,.08);
+  transition:transform .5s cubic-bezier(.25,1,.5,1),opacity .4s ease,clip-path .6s cubic-bezier(.25,1,.5,1),z-index 0s;
+  display:flex;
+  clip-path:inset(0 100% 100% 0);
+}
+.tab-card.card-open{
+  clip-path:inset(0 0 0 0);
+}
+
+#intro{
+  text-align:center;
+  padding:18px 0 0 0;
+}
+.intro-line{
+  font-family:'Klondike',monospace;
+  font-size:1.35rem;font-weight:700;
+  line-height:2;
+  transition:transform .3s cubic-bezier(.25,1,.5,1);
+  cursor:default;
+}
+.intro-line:hover{
+  transform:scale(1.08);
+}
+
+/* ===== 导航栏 ===== */
+#nav{
+  position:fixed;top:0;left:0;right:0;
+  z-index:999;
+  display:flex;justify-content:center;align-items:center;
+  padding:14px 0;
+  pointer-events:none;
+}
+.nav-half{
+  display:flex;width:50%;
+  transition:transform .5s cubic-bezier(.25,1.2,.35,1),opacity .4s ease;
+}
+.nav-half.left{justify-content:flex-end;transform:translateX(0);opacity:1}
+.nav-half.right{justify-content:flex-start;transform:translateX(0);opacity:1}
+.nav-half.split-out.left{transform:translateX(-120%);opacity:0}
+.nav-half.split-out.right{transform:translateX(120%);opacity:0}
+.nav-half.split-in.left{transform:translateX(-120%);opacity:0}
+.nav-half.split-in.right{transform:translateX(120%);opacity:0}
+.nav-item{
+  position:relative;
+  width:50%;
+  text-align:center;
+  padding:8px 0 12px 0;
+  cursor:pointer;
+  pointer-events:auto;
+  font-family:'Klondike',monospace;
+  font-size:1.4rem;font-weight:700;
+  background:transparent;border:none;
+  transition:font-weight .2s ease;
+}
+.nav-item::after{
+  content:'';
+  position:absolute;bottom:0;left:50%;
+  transform:translateX(-50%);
+  height:3px;border-radius:2px;
+  width:24px;
+  background:var(--ul-color, #333);
+  transition:width .35s cubic-bezier(.25,1,.5,1);
+}
+.nav-item.active{
+  font-weight:900;
+}
+.nav-item.active::after{
+  width:60px;
+}
+.nav-item:hover::after{
+  width:60px;
+}
+</style>
 </head>
 <body>
 
@@ -62,310 +459,1193 @@
   <div id="preload-bar-wrap"><div id="preload-bar"></div></div>
 </div>
 
-<nav id="nav" role="tablist" aria-label="页面导航">
+<nav id="nav">
   <div class="nav-half left" id="nav-left">
-    <button class="nav-item active" style="color:#4A90D9" data-page="0" role="tab" aria-selected="true" aria-controls="hero" tabindex="0">欢迎</button>
-    <button class="nav-item" style="color:#E8C840" data-page="1" role="tab" aria-selected="false" aria-controls="main-section" tabindex="-1">介绍</button>
+    <div class="nav-item active" style="color:#4A90D9" data-page="0">欢迎<span style="display:none" class="ul-color">#4A90D9</span></div>
+    <div class="nav-item" style="color:#E8C840" data-page="1">介绍<span style="display:none" class="ul-color">#E8C840</span></div>
   </div>
   <div class="nav-half right" id="nav-right">
-    <button class="nav-item" style="color:#E8584A" data-page="2" role="tab" aria-selected="false" aria-controls="page3" tabindex="-1">爱好与工作</button>
-    <button class="nav-item" style="color:#E88AAB" data-page="3" role="tab" aria-selected="false" aria-controls="page4" tabindex="-1">动态</button>
+    <div class="nav-item" style="color:#E8584A" data-page="2">爱好与工作<span style="display:none" class="ul-color">#E8584A</span></div>
+    <div class="nav-item" style="color:#E88AAB" data-page="3">动态<span style="display:none" class="ul-color">#E88AAB</span></div>
   </div>
 </nav>
 
-<section id="hero" class="snap-section" role="tabpanel" aria-label="欢迎页">
-  <canvas id="hero-shapes-canvas" aria-hidden="true"></canvas>
+<section id="hero">
+  <canvas id="hero-shapes-canvas"></canvas>
   <div id="typing-wrap">
     <span id="typing-text"></span><span id="typing-cursor"></span>
   </div>
-  <div id="scroll-hint" aria-hidden="true">↓ scroll</div>
+  <div id="scroll-hint">↓ scroll</div>
 </section>
 
-<section id="main-section" class="snap-section" role="tabpanel" aria-label="个人介绍">
+<section id="main-section">
   <div id="zone-left" class="char-zone">
-    <img class="char-img" src="/assets/%E4%B8%8A%E4%BC%8A%E9%82%A3%E7%89%A1%E4%B8%B9_%E5%AE%98%E6%96%B9%E8%AE%BE%E5%AE%9A%E5%9B%BE_%E9%80%8F%E6%98%8E%E8%83%8C%E6%99%AF-C4w5xR3c.webp" alt="上伊那牡丹" loading="lazy" decoding="async">
-    <div class="marquee-strip" aria-hidden="true"><span class="marquee-inner" id="mq-l1"></span></div>
-    <div class="marquee-strip" aria-hidden="true"><span class="marquee-inner" id="mq-l2"></span></div>
+    <img class="char-img" src="image/上伊那牡丹_官方设定图_透明背景.png" alt="">
+    <div class="marquee-strip"><span class="marquee-inner" id="mq-l1"></span></div>
+    <div class="marquee-strip"><span class="marquee-inner" id="mq-l2"></span></div>
   </div>
   <div id="zone-right" class="char-zone">
-    <img class="char-img" src="/assets/%E7%A0%BA%E6%B3%A2%E4%BC%8A%E5%90%B9_%E5%AE%98%E6%96%B9%E8%AE%BE%E5%AE%9A%E5%9B%BE_%E9%80%8F%E6%98%8E%E8%83%8C%E6%99%AF-yrfC9wgi.webp" alt="砺波伊吹" loading="lazy" decoding="async">
-    <div class="marquee-strip" aria-hidden="true"><span class="marquee-inner" id="mq-r1"></span></div>
-    <div class="marquee-strip" aria-hidden="true"><span class="marquee-inner" id="mq-r2"></span></div>
+    <img class="char-img" src="image/砺波伊吹_官方设定图_透明背景.png" alt="">
+    <div class="marquee-strip"><span class="marquee-inner" id="mq-r1"></span></div>
+    <div class="marquee-strip"><span class="marquee-inner" id="mq-r2"></span></div>
   </div>
-  <div id="bottle-layer" aria-hidden="true"></div>
-  <div id="scroll-hint-p2" aria-label="点击重置动画">↓ scroll</div>
+  <div id="bottle-layer"></div>
+  <div id="scroll-hint-p2">↓ scroll</div>
   <div id="main-content">
-    <div id="pixel-title" role="button" tabindex="0" aria-label="BaiWo 像素艺术 - 点击触发爆炸效果"></div>
+    <div id="pixel-title"></div>
     <div id="intro"></div>
   </div>
 </section>
 
 <!-- ===== 第三屏：爱好与工作 ===== -->
-<section id="page3" class="snap-section" role="tabpanel" aria-label="爱好与工作">
+<section id="page3">
   <div class="tabs-container">
     <div class="tab-chars">
       <div class="tab-char-wrap show" data-tab="0">
-        <img class="tab-char-img" loading="lazy" decoding="async" src="/assets/%E6%81%8B%E4%BA%BA%E4%B8%8D%E8%A1%8C%E5%8A%A8_%E5%B0%8F%E6%9F%B3%E9%A6%99%E7%A9%82_%E5%AE%98%E6%96%B9%E8%AE%BE%E5%AE%9A%E5%9B%BE_%E9%80%8F%E6%98%8E%E8%83%8C%E6%99%AF-Bw1_oFG-.webp" alt="小柳香穂">
-        <div class="tab-char-name" aria-hidden="true"><span class="tab-char-scroll" style="color:#4A90D9">小柳香穂</span></div>
+        <img class="tab-char-img" src="image/恋人不行动_小柳香穂_官方设定图_透明背景.png" alt="">
+        <div class="tab-char-name"><span class="tab-char-scroll" style="color:#4A90D9">小柳香穂</span></div>
       </div>
       <div class="tab-char-wrap" data-tab="1">
-        <img class="tab-char-img" loading="lazy" decoding="async" src="/assets/%E6%81%8B%E4%BA%BA%E4%B8%8D%E8%A1%8C%E5%8A%A8_%E7%94%98%E7%B9%94%E3%82%8C%E3%81%AA%E5%AD%90_%E5%AE%98%E6%96%B9%E8%AE%BE%E5%AE%9A%E5%9B%BE_%E9%80%8F%E6%98%8E%E8%83%8C%E6%99%AF-B_C4kCbr.webp" alt="甘織れな子">
-        <div class="tab-char-name" aria-hidden="true"><span class="tab-char-scroll" style="color:#FFB6C1">甘織れな子</span></div>
+        <img class="tab-char-img" src="image/恋人不行动_甘織れな子_官方设定图_透明背景.png" alt="">
+        <div class="tab-char-name"><span class="tab-char-scroll" style="color:#FFB6C1">甘織れな子</span></div>
       </div>
       <div class="tab-char-wrap" data-tab="2">
-        <img class="tab-char-img" loading="lazy" decoding="async" src="/assets/%E6%81%8B%E4%BA%BA%E4%B8%8D%E8%A1%8C%E5%8A%A8_%E7%80%AC%E5%90%8D%E7%B4%AB%E9%99%BD%E8%8A%B1_%E5%AE%98%E6%96%B9%E8%AE%BE%E5%AE%9A%E5%9B%BE_%E9%80%8F%E6%98%8E%E8%83%8C%E6%99%AF-BLD3xt-s.webp" alt="瀬名紫陽花">
-        <div class="tab-char-name" aria-hidden="true"><span class="tab-char-scroll" style="color:#F7C948">瀬名紫陽花</span></div>
+        <img class="tab-char-img" src="image/恋人不行动_瀬名紫陽花_官方设定图_透明背景.png" alt="">
+        <div class="tab-char-name"><span class="tab-char-scroll" style="color:#F7C948">瀬名紫陽花</span></div>
       </div>
       <div class="tab-char-wrap" data-tab="3">
-        <img class="tab-char-img" loading="lazy" decoding="async" src="/assets/%E6%81%8B%E4%BA%BA%E4%B8%8D%E8%A1%8C%E5%8A%A8_%E7%90%B4%E7%B4%97%E6%9C%88_%E5%AE%98%E6%96%B9%E8%AE%BE%E5%AE%9A%E5%9B%BE_%E9%80%8F%E6%98%8E%E8%83%8C%E6%99%AF-BkIyZ_MT.webp" alt="琴紗月">
-        <div class="tab-char-name" aria-hidden="true"><span class="tab-char-scroll" style="color:#333">琴紗月</span></div>
+        <img class="tab-char-img" src="image/恋人不行动_琴紗月_官方设定图_透明背景.png" alt="">
+        <div class="tab-char-name"><span class="tab-char-scroll" style="color:#333">琴紗月</span></div>
       </div>
       <div class="tab-char-wrap" data-tab="4">
-        <img class="tab-char-img" loading="lazy" decoding="async" src="/assets/%E6%81%8B%E4%BA%BA%E4%B8%8D%E8%A1%8C%E5%8A%A8_%E7%8E%8B%E5%A1%9A%E7%9C%9F%E5%94%AF_%E5%AE%98%E6%96%B9%E8%AE%BE%E5%AE%9A%E5%9B%BE_%E9%80%8F%E6%98%8E%E8%83%8C%E6%99%AF-BfbK_VeI.webp" alt="王塚真唯">
-        <div class="tab-char-name" aria-hidden="true"><span class="tab-char-scroll" style="color:#D4A017">王塚真唯</span></div>
+        <img class="tab-char-img" src="image/恋人不行动_王塚真唯_官方设定图_透明背景.png" alt="">
+        <div class="tab-char-name"><span class="tab-char-scroll" style="color:#D4A017">王塚真唯</span></div>
       </div>
     </div>
-    <div class="tab-card" data-tab="0" id="tabpanel-0" role="tabpanel" aria-label="游戏">
+    <div class="tab-card" data-tab="0">
       <div class="tab-content">
         <div class="tab-title">游戏</div>
-        <div class="tab-body">
-          <div class="mini-card">
-            <div class="mini-card-head">
-              <span class="mini-card-name">恋人不行动</span>
-              <span class="mini-card-tag" style="background:rgba(255,182,193,.18);color:#d46a85">视觉小说</span>
-            </div>
-            <p class="mini-card-desc">近期最爱的百合向文字冒险，五位角色各有深度。通关后久久不能平静。</p>
-          </div>
-          <div class="mini-card">
-            <div class="mini-card-head">
-              <span class="mini-card-name">Steam 库 · 100+ 款</span>
-              <span class="mini-card-tag" style="background:rgba(74,144,217,.12);color:#4A90D9">PC</span>
-            </div>
-            <p class="mini-card-desc">从独立像素风到 3A 大作，从硬核动作 RPG 到治愈日常。Switch 卡带也堆了一抽屉。</p>
-          </div>
-          <div class="mini-card">
-            <div class="mini-card-head">
-              <span class="mini-card-name">日式桌游 & 策略</span>
-              <span class="mini-card-tag" style="background:rgba(144,238,144,.15);color:#3a8a3a">桌游</span>
-            </div>
-            <p class="mini-card-desc">卡坦岛、璀璨宝石、七大奇迹……周末和朋友开局就是半天。</p>
-          </div>
-        </div>
+        <div class="tab-body"></div>
       </div>
     </div>
-    <div class="tab-card" data-tab="1" id="tabpanel-1" role="tabpanel" aria-label="动漫">
+    <div class="tab-card" data-tab="1">
       <div class="tab-content">
         <div class="tab-title">动漫</div>
-        <div class="tab-body">
-          <div class="mini-card">
-            <div class="mini-card-head">
-              <span class="mini-card-name">恋人不行动</span>
-              <span class="mini-card-tag" style="background:rgba(255,182,193,.18);color:#d46a85">百合</span>
-              <span class="mini-card-tag" style="background:rgba(232,200,64,.15);color:#b89a18">本季推荐</span>
-            </div>
-            <p class="mini-card-desc">五位女主角各有魅力，情感描写细腻真实。强烈推荐原作小说和漫画一起看。</p>
-          </div>
-          <div class="mini-card">
-            <div class="mini-card-head">
-              <span class="mini-card-name">日常系 & 治愈系</span>
-              <span class="mini-card-tag" style="background:rgba(144,238,144,.15);color:#3a8a3a">治愈</span>
-            </div>
-            <p class="mini-card-desc">摇曳露营、向山进发、孤独摇滚……日常中的小确幸是最好的充电。</p>
-          </div>
-          <div class="mini-card">
-            <div class="mini-card-head">
-              <span class="mini-card-name">奇幻 & 冒险</span>
-              <span class="mini-card-tag" style="background:rgba(74,144,217,.12);color:#4A90D9">冒险</span>
-            </div>
-            <p class="mini-card-desc">葬送的芙莉莲、迷宫饭——好故事不分类型，追番之余也爱翻原作漫画。</p>
-          </div>
-        </div>
+        <div class="tab-body"></div>
       </div>
     </div>
-    <div class="tab-card" data-tab="2" id="tabpanel-2" role="tabpanel" aria-label="智能体">
+    <div class="tab-card" data-tab="2">
       <div class="tab-content">
         <div class="tab-title">智能体</div>
-        <div class="tab-body">
-          <div class="mini-card">
-            <div class="mini-card-head">
-              <span class="mini-card-name">代码助手 Agent</span>
-              <span class="mini-card-tag" style="background:rgba(74,144,217,.12);color:#4A90D9">华为云</span>
-            </div>
-            <p class="mini-card-desc">基于大模型的代码生成与审查智能体，支持多语言、上下文理解和自动修复。</p>
-          </div>
-          <div class="mini-card">
-            <div class="mini-card-head">
-              <span class="mini-card-name">知识问答系统</span>
-              <span class="mini-card-tag" style="background:rgba(232,88,74,.12);color:#E8584A">RAG</span>
-            </div>
-            <p class="mini-card-desc">检索增强生成（RAG）架构，结合向量检索和 LLM 推理，覆盖专业领域问答。</p>
-          </div>
-          <div class="mini-card">
-            <div class="mini-card-head">
-              <span class="mini-card-name">数据分析流水线</span>
-              <span class="mini-card-tag" style="background:rgba(144,238,144,.15);color:#3a8a3a">自动化</span>
-            </div>
-            <p class="mini-card-desc">大模型 + 工具链组合：自动清洗数据、生成可视化报告、输出结构化结论。</p>
-          </div>
-        </div>
+        <div class="tab-body"></div>
       </div>
     </div>
-    <div class="tab-card" data-tab="3" id="tabpanel-3" role="tabpanel" aria-label="生物学模型">
+    <div class="tab-card" data-tab="3">
       <div class="tab-content">
         <div class="tab-title">生物学模型</div>
-        <div class="tab-body">
-          <div class="mini-card">
-            <div class="mini-card-head">
-              <span class="mini-card-name">基因组组装 & 注释</span>
-              <span class="mini-card-tag" style="background:rgba(144,238,144,.15);color:#3a8a3a">基因组学</span>
-            </div>
-            <p class="mini-card-desc">从 reads 到 contig 到 scaffold，完整走过 de novo 组装流水线。牛蛙项目是最有趣的案例。</p>
-          </div>
-          <div class="mini-card">
-            <div class="mini-card-head">
-              <span class="mini-card-name">蛋白质结构预测</span>
-              <span class="mini-card-tag" style="background:rgba(74,144,217,.12);color:#4A90D9">结构生物学</span>
-            </div>
-            <p class="mini-card-desc">使用 AlphaFold2 / ESMFold 进行蛋白质三维结构预测，结合分子对接做功能分析。</p>
-          </div>
-          <div class="mini-card">
-            <div class="mini-card-head">
-              <span class="mini-card-name">系统发育分析</span>
-              <span class="mini-card-tag" style="background:rgba(255,165,0,.12);color:#c77800">进化</span>
-            </div>
-            <p class="mini-card-desc">多序列比对 → 建树 → 可视化，用最大似然法和贝叶斯推断重建物种演化历史。</p>
-          </div>
-        </div>
+        <div class="tab-body"></div>
       </div>
     </div>
-    <div class="tab-card" data-tab="4" id="tabpanel-4" role="tabpanel" aria-label="小软件">
+    <div class="tab-card" data-tab="4">
       <div class="tab-content">
         <div class="tab-title">小软件</div>
-        <div class="tab-body">
-          <div class="mini-card">
-            <div class="mini-card-head">
-              <span class="mini-card-name">个人网站 (你正在看的)</span>
-              <span class="mini-card-tag" style="background:rgba(255,182,193,.18);color:#d46a85">Web</span>
-            </div>
-            <p class="mini-card-desc">纯前端单文件，含像素物理引擎、酒瓶碰撞、角色动画和打字机效果。</p>
-          </div>
-          <div class="mini-card">
-            <div class="mini-card-head">
-              <span class="mini-card-name">数据可视化工具集</span>
-              <span class="mini-card-tag" style="background:rgba(74,144,217,.12);color:#4A90D9">工具</span>
-            </div>
-            <p class="mini-card-desc">CSV/JSON → 交互式图表一键转换，为科学数据快速可视化而生。</p>
-          </div>
-          <div class="mini-card">
-            <div class="mini-card-head">
-              <span class="mini-card-name">自动化脚本合集</span>
-              <span class="mini-card-tag" style="background:rgba(144,238,144,.15);color:#3a8a3a">效率</span>
-            </div>
-            <p class="mini-card-desc">文件批处理、数据清洗、定时任务……能用代码解决的问题绝不手动。</p>
-          </div>
-        </div>
+        <div class="tab-body"></div>
       </div>
     </div>
   </div>
-  <div class="tab-dots" role="tablist" aria-label="爱好分类切换">
-    <div class="tab-dot active" style="background:#4A90D9" data-tab="0" role="tab" aria-selected="true" aria-label="游戏" aria-controls="tabpanel-0" tabindex="0"></div>
-    <div class="tab-dot" style="background:#FFB6C1" data-tab="1" role="tab" aria-selected="false" aria-label="动漫" aria-controls="tabpanel-1" tabindex="-1"></div>
-    <div class="tab-dot" style="background:#F7C948" data-tab="2" role="tab" aria-selected="false" aria-label="智能体" aria-controls="tabpanel-2" tabindex="-1"></div>
-    <div class="tab-dot" style="background:#333" data-tab="3" role="tab" aria-selected="false" aria-label="生物学模型" aria-controls="tabpanel-3" tabindex="-1"></div>
-    <div class="tab-dot" style="background:#D4A017" data-tab="4" role="tab" aria-selected="false" aria-label="小软件" aria-controls="tabpanel-4" tabindex="-1"></div>
+  <div class="tab-dots">
+    <div class="tab-dot active" style="background:#4A90D9" data-tab="0"></div>
+    <div class="tab-dot" style="background:#FFB6C1" data-tab="1"></div>
+    <div class="tab-dot" style="background:#F7C948" data-tab="2"></div>
+    <div class="tab-dot" style="background:#333" data-tab="3"></div>
+    <div class="tab-dot" style="background:#D4A017" data-tab="4"></div>
   </div>
 </section>
 
-<!-- ===== 第四屏：动态 / 作品时间线 ===== -->
-<section id="page4" class="snap-section" role="tabpanel" aria-label="动态与作品时间线">
-  <div class="page4-title">动态 & 作品</div>
-  <div class="timeline-wrap">
-
-    <div class="tl-item" style="--tl-color:#4A90D9">
-      <div class="tl-date">2026.05</div>
-      <div class="tl-card">
-        <div class="tl-title">个人网站 baiwoo.xyz 上线</div>
-        <p class="tl-desc">从零搭建的个人主页，融合像素物理引擎、酒瓶碰撞系统和角色动画，纯前端单页实现。</p>
-        <div class="tl-tags">
-          <span class="tl-tag" style="background:rgba(74,144,217,.12);color:#4A90D9">HTML/CSS/JS</span>
-          <span class="tl-tag" style="background:rgba(74,144,217,.12);color:#4A90D9">Canvas</span>
-        </div>
+<section id="dynamic-page">
+  <div class="dyn-content">
+    <div class="dyn-title">最近动态 & 联系方式</div>
+    <div class="gh-profile">
+      <img class="gh-avatar" src="https://avatars.githubusercontent.com/u/184575128?v=4">
+      <div class="gh-info">
+        <div class="gh-name">Yizhou Wang <span style="font-weight:400;font-size:.75rem;color:rgba(60,60,60,.5)">@BaiWoww</span></div>
+        <div class="gh-bio">Shanghai Ocean University · 15 public repos</div>
       </div>
     </div>
-
-    <div class="tl-item" style="--tl-color:#E8584A">
-      <div class="tl-date">2026.03</div>
-      <div class="tl-card">
-        <div class="tl-title">华为云码道 · 智能体矩阵</div>
-        <p class="tl-desc">在华为云码道平台上构建了一系列智能体：代码助手、知识问答、数据分析流水线。覆盖从需求理解到自动化部署的完整链路。</p>
-        <div class="tl-tags">
-          <span class="tl-tag" style="background:rgba(232,88,74,.12);color:#E8584A">LLM</span>
-          <span class="tl-tag" style="background:rgba(232,88,74,.12);color:#E8584A">Agent</span>
-          <span class="tl-tag" style="background:rgba(232,88,74,.12);color:#E8584A">华为云</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="tl-item" style="--tl-color:#90EE90">
-      <div class="tl-date">2026.01</div>
-      <div class="tl-card">
-        <div class="tl-title">牛蛙基因组组装项目</div>
-        <p class="tl-desc">完成牛蛙基因组的 de novo 组装与注释。有趣的是——模型预测牛蛙本身反而最不准，这个反直觉的发现成了最好的谈资。</p>
-        <div class="tl-tags">
-          <span class="tl-tag" style="background:rgba(144,238,144,.15);color:#3a8a3a">生物信息</span>
-          <span class="tl-tag" style="background:rgba(144,238,144,.15);color:#3a8a3a">基因组</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="tl-item" style="--tl-color:#FFA500">
-      <div class="tl-date">2025.11</div>
-      <div class="tl-card">
-        <div class="tl-title">小众数据可视化工具集</div>
-        <p class="tl-desc">一组用于科学数据快速可视化的小工具，支持从 CSV/JSON 到交互式图表的一键转换。能用代码解决的问题绝不手动。</p>
-        <div class="tl-tags">
-          <span class="tl-tag" style="background:rgba(255,165,0,.12);color:#c77800">数据可视化</span>
-          <span class="tl-tag" style="background:rgba(255,165,0,.12);color:#c77800">工具</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="tl-item" style="--tl-color:#FFB6C1">
-      <div class="tl-date">2025.09</div>
-      <div class="tl-card">
-        <div class="tl-title">自动化脚本合集</div>
-        <p class="tl-desc">日常工作流自动化脚本合集：文件批处理、数据清洗、定时任务调度。持续迭代中的效率工具箱。</p>
-        <div class="tl-tags">
-          <span class="tl-tag" style="background:rgba(255,182,193,.15);color:#d46a85">Python</span>
-          <span class="tl-tag" style="background:rgba(255,182,193,.15);color:#d46a85">自动化</span>
-        </div>
-      </div>
-    </div>
-
+    <div class="dyn-subtitle">GitHub 公开仓库</div>
+    <a class="repo-card" href="https://github.com/BaiWoww/share_writing_window" target="_blank">
+      <div class="rname"><span>share_writing_window</span><span class="rlang" style="background:#3178C6">TypeScript</span></div>
+      <div class="rdesc">局域网设备间共享和同步待办笔记，方便跨设备办公</div>
+      <div class="rupdated">Updated Jul 29, 2026</div>
+    </a>
+    <a class="repo-card" href="https://github.com/BaiWoww/D-D-Agent" target="_blank">
+      <div class="rname"><span>D-D-Agent</span><span class="rlang" style="background:#3572A5">Python</span></div>
+      <div class="rdesc">需求拆解智能体 - 多专家集群 x 多用户维度 x 多轮澄清交互，Python + LangGraph + FastAPI + React + 火山方舟</div>
+      <div class="rupdated">Updated Jul 27, 2026</div>
+    </a>
+    <a class="repo-card" href="https://github.com/BaiWoww/desk_manage" target="_blank">
+      <div class="rname"><span>desk_manage</span><span class="rlang" style="background:#3178C6">TypeScript</span></div>
+      <div class="rdesc">桌面图标和文件管理软件，让杂乱图标远离你的壁纸</div>
+      <div class="rupdated">Updated Jul 24, 2026</div>
+    </a>
+    <a class="repo-card" href="https://github.com/BaiWoww/volume_control" target="_blank">
+      <div class="rname"><span>volume_control</span><span class="rlang" style="background:#3572A5">Python</span></div>
+      <div class="rdesc">可控制各软件音量的悬浮球</div>
+      <div class="rupdated">Updated Jul 23, 2026</div>
+    </a>
+    <a class="repo-card" href="https://github.com/BaiWoww/SSH_MCP" target="_blank">
+      <div class="rname"><span>SSH_MCP</span><span class="rlang" style="background:#3178C6">TypeScript</span></div>
+      <div class="rdesc">Electron SSH连接管理器 + MCP工具，安全暴露连接给AI智能体</div>
+      <div class="rupdated">Updated Jul 22, 2026</div>
+    </a>
+    <a class="repo-card" href="https://github.com/BaiWoww" target="_blank" style="text-align:center;font-weight:700;background:rgba(0,0,0,.06)">
+      → 查看全部仓库 github.com/BaiWoww
+    </a>
   </div>
 </section>
 
-<!-- ===== 底部联系栏 ===== -->
-<div id="contact-bar" role="navigation" aria-label="联系方式">
-  <a class="contact-link" href="https://github.com/baiwoo" target="_blank" rel="noopener noreferrer">
-    <svg viewBox="0 0 24 24"><path d="M12 .3a12 12 0 00-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.31-5.47-1.34-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 016.02 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 011.32 3.22c0 4.61-2.8 5.62-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0012 .3"/></svg>
-    GitHub
-  </a>
-  <a class="contact-link" href="https://space.bilibili.com/baiwoo" target="_blank" rel="noopener noreferrer">
-    <svg viewBox="0 0 24 24"><path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 01-.373-.906c0-.356.124-.658.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 01.16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.151.929.4.267.249.391.551.391.907 0 .355-.124.657-.373.906zM5.333 7.24c-.746.018-1.373.276-1.88.773-.506.498-.769 1.13-.786 1.894v7.52c.017.764.28 1.395.786 1.893.507.498 1.134.756 1.88.773h13.334c.746-.017 1.373-.275 1.88-.773.506-.498.769-1.129.786-1.893v-7.52c-.017-.765-.28-1.396-.786-1.894-.507-.497-1.134-.755-1.88-.773zM8 11.107c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c0-.373.129-.689.386-.947.258-.257.574-.386.947-.386zm8 0c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373z"/></svg>
-    Bilibili
-  </a>
-  <a class="contact-link" href="mailto:baiwoo@example.com">
-    <svg viewBox="0 0 24 24"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/></svg>
-    Email
-  </a>
-  <button class="contact-link theme-toggle" id="theme-toggle" type="button" aria-label="切换亮色/暗色主题" title="切换主题">
-    <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-    <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17a5 5 0 100-10 5 5 0 000 10zm0-13a1 1 0 011 1v1a1 1 0 11-2 0V5a1 1 0 011-1zm0 14a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM4.22 4.22a1 1 0 011.42 0l.7.7A1 1 0 015.64 6.34l-.7-.7a1 1 0 010-1.42zm12.02 12.02a1 1 0 011.42 0l.7.7a1 1 0 11-1.42 1.42l-.7-.7a1 1 0 010-1.42zM2 12a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm17 0a1 1 0 011-1h1a1 1 0 110 2h-1a1 1 0 01-1-1zM4.22 19.78a1 1 0 010-1.42l.7-.7A1 1 0 116.34 19.1l-.7.7a1 1 0 01-1.42 0zm12.02-12.02a1 1 0 010-1.42l.7-.7a1 1 0 111.42 1.42l-.7.7a1 1 0 01-1.42 0z"/></svg>
-    <span class="label-to-dark">夜间</span>
-    <span class="label-to-light">日间</span>
-  </button>
-</div>
+<script>
+// ============ 预加载 ============
+(function(){
+  const preloadOverlay = document.getElementById("preload-overlay");
+  const preloadBar = document.getElementById("preload-bar");
+  const preloadText = document.getElementById("preload-text");
 
+  const critical = [
+    "typeface/Klondike-Bold.ttf",
+    "image/上伊那牡丹_官方设定图_透明背景.png",
+    "image/砺波伊吹_官方设定图_透明背景.png",
+  ];
+  const immediate = [
+    "typeface/nagino.otf",
+    "image/tietie.png",
+  ];
+  const deferred = [
+    "image/asahi_super_dry-removebg-preview.png",
+    "image/ballantines-removebg-preview.png",
+    "image/character_1.png",
+    "image/character_2.png",
+    "image/character_3.png",
+    "image/character_4.png",
+    "image/chichibu_beer-removebg-preview.png",
+    "image/chichibu_kyoho-removebg-preview.png",
+    "image/chichibu_nishiki-removebg-preview.png",
+    "image/gun.jpg",
+    "image/hibiki-removebg-preview.png",
+    "image/hourai_kuramoto-removebg-preview.png",
+    "image/ichiro_malt_grain-removebg-preview.png",
+    "image/kitaya_daiginjo-removebg-preview.png",
+    "image/makers_mark-removebg-preview.png",
+    "image/minami_yamadanishiki-removebg-preview.png",
+    "image/miyagikyo-removebg-preview.png",
+    "image/恋人不行动_小柳香穂_官方设定图_透明背景.png",
+    "image/恋人不行动_甘織れな子_官方设定图_透明背景.png",
+    "image/恋人不行动_瀬名紫陽花_官方设定图_透明背景.png",
+    "image/恋人不行动_琴紗月_官方设定图_透明背景.png",
+    "image/恋人不行动_王塚真唯_官方设定图_透明背景.png"
+  ];
+
+  let loaded = 0;
+  const total = critical.length;
+
+  function onCriticalLoaded(){
+    loaded++;
+    const pct = Math.round(loaded / total * 100);
+    preloadBar.style.width = pct + "%";
+    preloadText.textContent = `Loading ${pct}%`;
+    if(loaded >= total){
+      preloadText.textContent = "Ready!";
+      setTimeout(()=>{
+        preloadOverlay.classList.add("done");
+        window._preloadDone = true;
+        window.dispatchEvent(new Event("preload-done"));
+      }, 400);
+    }
+  }
+
+  function loadResource(src, cb){
+    if(src.endsWith(".ttf") || src.endsWith(".woff2") || src.endsWith(".otf")){
+      const family = src.includes("nagino") ? "Nagino" : "Klondike";
+      const font = new FontFace(family, `url(${src})`, {weight:"700"});
+      font.load().then(cb).catch(cb);
+    } else {
+      const img = new Image();
+      img.onload = cb;
+      img.onerror = cb;
+      img.src = src;
+    }
+  }
+
+  critical.forEach(src => loadResource(src, onCriticalLoaded));
+
+  window.addEventListener("preload-done", ()=>{
+    immediate.forEach(src => loadResource(src, ()=>{}));
+    setTimeout(()=>{
+      deferred.forEach(src => loadResource(src, ()=>{}));
+    }, 500);
+  }, {once: true});
+})();
+
+// ============ 阻尼页面切换 ============
+const heroEl = document.getElementById("hero");
+const mainEl = document.getElementById("main-section");
+let currentPage = 0;
+let isSnapping = false;
+
+let heroRafId = null;
+let pixelRafId = null;
+let bottleRafId = null;
+let scrollStateRafId = null;
+
+const page3El = document.getElementById("page3");
+const dynamicPageEl = document.getElementById("dynamic-page");
+
+function goToPage(idx){
+  if(idx < 0 || idx > 3 || isSnapping || idx === currentPage) return;
+  isSnapping = true;
+  const oldPage = currentPage;
+  currentPage = idx;
+
+  const nl = document.getElementById("nav-left");
+  const nr = document.getElementById("nav-right");
+  nl.classList.add("split-out");
+  nr.classList.add("split-out");
+
+  setTimeout(()=>{
+    document.querySelectorAll(".nav-item").forEach(btn=>{
+      btn.classList.toggle("active", parseInt(btn.dataset.page) === idx);
+    });
+    nl.classList.remove("split-out");
+    nr.classList.remove("split-out");
+    nl.classList.add("split-in");
+    nr.classList.add("split-in");
+    void nl.offsetWidth;
+    nl.classList.remove("split-in");
+    nr.classList.remove("split-in");
+  },500);
+
+  heroEl.classList.toggle("out", idx !== 0);
+  mainEl.classList.toggle("in", idx === 1);
+  page3El.classList.toggle("in", idx === 2);
+  dynamicPageEl.classList.toggle("in", idx === 3);
+
+  if(oldPage === 0){
+    cancelAnimationFrame(heroRafId);
+    heroRafId = null;
+  }
+  if(oldPage === 1){
+    cancelAnimationFrame(pixelRafId);
+    pixelRafId = null;
+    cancelAnimationFrame(bottleRafId);
+    bottleRafId = null;
+    cancelAnimationFrame(scrollStateRafId);
+    scrollStateRafId = null;
+  }
+  if(idx === 0){
+    if(!heroRafId) heroRafId = requestAnimationFrame(animateHeroShapes);
+  } else if(idx === 1){
+    if(!pixelRafId) pixelRafId = requestAnimationFrame(animatePixels);
+    if(!scrollStateRafId) scrollStateRafId = requestAnimationFrame(checkScrollState);
+    if(scrollPhys && !bottleRafId) bottleRafId = requestAnimationFrame(animateBottles);
+  }
+
+  setTimeout(()=>{
+    isSnapping = false;
+    if(idx === 1 && !mainInited){
+      mainInited = true;
+      initMainPage();
+    }
+    if(idx === 2 && !page3Inited){
+      page3Inited = true;
+      initPage3();
+    }
+  },950);
+}
+
+let wheelAccum = 0;
+const WHEEL_THRESHOLD = 50;
+const WHEEL_COOLDOWN = 1000;
+let wheelCooldown = false;
+
+window.addEventListener("wheel",(e)=>{
+  e.preventDefault();
+  if(wheelCooldown) return;
+  wheelAccum += e.deltaY;
+  if(Math.abs(wheelAccum) >= WHEEL_THRESHOLD){
+    const dir = wheelAccum > 0 ? 1 : -1;
+    wheelAccum = 0;
+    wheelCooldown = true;
+    goToPage(currentPage + dir);
+    setTimeout(()=> wheelCooldown = false, WHEEL_COOLDOWN);
+  }
+},{passive:false});
+
+let touchStartY = 0;
+window.addEventListener("touchstart",(e)=>{touchStartY = e.touches[0].clientY},{passive:true});
+window.addEventListener("touchend",(e)=>{
+  const diff = touchStartY - e.changedTouches[0].clientY;
+  if(Math.abs(diff) > 60) goToPage(currentPage + (diff > 0 ? 1 : -1));
+},{passive:true});
+
+// 导航按钮点击
+document.querySelectorAll(".nav-item").forEach(btn=>{
+  const color = btn.style.color;
+  btn.style.setProperty("--ul-color", color);
+  const after = btn.querySelector(".ul-color");
+  if(after) after.remove();
+  btn.addEventListener("click",()=> goToPage(parseInt(btn.dataset.page)));
+});
+
+// ============ 第一屏立体漂浮几何体 ============
+const heroCanvas = document.getElementById("hero-shapes-canvas");
+const heroCtx2 = heroCanvas.getContext("2d");
+heroCanvas.width = window.innerWidth;
+heroCanvas.height = window.innerHeight;
+window.addEventListener("resize",()=>{
+  heroCanvas.width = window.innerWidth;
+  heroCanvas.height = window.innerHeight;
+});
+
+const shapeColors = ["#87CEEB","#FFA500","#90EE90"];
+const shapeTypes = ["sphere","cube","prism"];
+const heroShapes = [];
+const HSG = 0;
+const HSBOUNCE = 0.95;
+const HSFRICTION = 1;
+
+function createHeroShape(type, color, x, y, vx, vy){
+  const size = 40 + Math.random()*30;
+  return {type, color, x, y, vx, vy, size, rotation: Math.random()*Math.PI*2, vr: (Math.random()-.5)*0.03};
+}
+
+function spawnHeroShapes(){
+  const w = window.innerWidth, h = window.innerHeight;
+  const corners = [[0,0],[w,0],[0,h],[w,h]];
+  const count = 5 + Math.floor(Math.random()*3);
+  for(let c=0;c<4;c++){
+    for(let i=0;i<count;i++){
+      const type = shapeTypes[Math.floor(Math.random()*3)];
+      const color = shapeColors[Math.floor(Math.random()*3)];
+      const cx = corners[c][0], cy = corners[c][1];
+      const angle = Math.atan2(h/2-cy, w/2-cx) + (Math.random()-.5)*1.2;
+      const speed = 1 + Math.random()*2;
+      heroShapes.push(createHeroShape(type, color, cx, cy, Math.cos(angle)*speed, Math.sin(angle)*speed));
+    }
+  }
+}
+
+function drawHeroShape(s){
+  heroCtx2.save();
+  heroCtx2.translate(s.x, s.y);
+  heroCtx2.rotate(s.rotation);
+  heroCtx2.fillStyle = s.color;
+  heroCtx2.strokeStyle = "rgba(0,0,0,.15)";
+  heroCtx2.lineWidth = 1.5;
+  const r = s.size/2;
+  if(s.type === "sphere"){
+    heroCtx2.beginPath();heroCtx2.arc(0,0,r,0,Math.PI*2);heroCtx2.fill();heroCtx2.stroke();
+    heroCtx2.fillStyle = "rgba(255,255,255,.3)";
+    heroCtx2.beginPath();heroCtx2.arc(-r*.25,-r*.25,r*.35,0,Math.PI*2);heroCtx2.fill();
+  } else if(s.type === "cube"){
+    const d = r*.35;
+    heroCtx2.beginPath();
+    heroCtx2.moveTo(-r+d,-r);heroCtx2.lineTo(r+d,-r);heroCtx2.lineTo(r+d,r);
+    heroCtx2.lineTo(-r+d,r);heroCtx2.closePath();heroCtx2.fill();heroCtx2.stroke();
+    heroCtx2.fillStyle = s.color;heroCtx2.globalAlpha=.7;
+    heroCtx2.beginPath();
+    heroCtx2.moveTo(-r+d,-r);heroCtx2.lineTo(-r-d,-r+d*.7);
+    heroCtx2.lineTo(-r-d,r+d*.7);heroCtx2.lineTo(-r+d,r);heroCtx2.closePath();heroCtx2.fill();heroCtx2.stroke();
+    heroCtx2.globalAlpha=.85;
+    heroCtx2.beginPath();
+    heroCtx2.moveTo(-r+d,-r);heroCtx2.lineTo(r+d,-r);heroCtx2.lineTo(r+d-d*2,-r+d*.7);
+    heroCtx2.lineTo(-r-d,-r+d*.7);heroCtx2.closePath();heroCtx2.fill();heroCtx2.stroke();
+    heroCtx2.globalAlpha=1;
+  } else {
+    heroCtx2.beginPath();
+    heroCtx2.moveTo(0,-r);heroCtx2.lineTo(r*.87,r*.5);heroCtx2.lineTo(-r*.87,r*.5);
+    heroCtx2.closePath();heroCtx2.fill();heroCtx2.stroke();
+    heroCtx2.fillStyle = "rgba(255,255,255,.2)";
+    heroCtx2.beginPath();
+    heroCtx2.moveTo(0,-r);heroCtx2.lineTo(r*.87,r*.5);heroCtx2.lineTo(0,r*.2);
+    heroCtx2.closePath();heroCtx2.fill();
+  }
+  heroCtx2.restore();
+}
+
+function animateHeroShapes(now){
+  if(currentPage !== 0){ heroRafId = null; return; }
+  if(!heroLastFrame) heroLastFrame = now;
+  if(now - heroLastFrame < 50){ heroRafId = requestAnimationFrame(animateHeroShapes); return; }
+  heroLastFrame = now;
+  heroCtx2.clearRect(0,0,heroCanvas.width,heroCanvas.height);
+  const w = heroCanvas.width, h = heroCanvas.height;
+  for(let i=0;i<heroShapes.length;i++){
+    const s = heroShapes[i];
+    s.vy += HSG;
+    s.vx *= HSFRICTION;
+    s.x += s.vx;
+    s.y += s.vy;
+    s.rotation += s.vr;
+    if(s.y + s.size/2 > h){ s.y = h - s.size/2; s.vy = -s.vy * HSBOUNCE; }
+    if(s.y - s.size/2 < 0){ s.y = s.size/2; s.vy = -s.vy * HSBOUNCE; }
+    if(s.x - s.size/2 < 0){ s.x = s.size/2; s.vx = -s.vx * HSBOUNCE; }
+    if(s.x + s.size/2 > w){ s.x = w - s.size/2; s.vx = -s.vx * HSBOUNCE; }
+    for(let j=i+1;j<heroShapes.length;j++){
+      const o = heroShapes[j];
+      const dx = o.x-s.x, dy = o.y-s.y;
+      const dist = Math.sqrt(dx*dx+dy*dy)||1;
+      const minD = (s.size+o.size)/2;
+      if(dist < minD){
+        const nx=dx/dist, ny=dy/dist, overlap=minD-dist;
+        s.x-=nx*overlap*.5; s.y-=ny*overlap*.5;
+        o.x+=nx*overlap*.5; o.y+=ny*overlap*.5;
+        const dvx=s.vx-o.vx, dvy=s.vy-o.vy, dot=dvx*nx+dvy*ny;
+        if(dot>0){
+          s.vx-=dot*nx*HSBOUNCE; s.vy-=dot*ny*HSBOUNCE;
+          o.vx+=dot*nx*HSBOUNCE; o.vy+=dot*ny*HSBOUNCE;
+        }
+      }
+    }
+    drawHeroShape(s);
+  }
+  heroRafId = requestAnimationFrame(animateHeroShapes);
+}
+let heroLastFrame = 0;
+
+function startHeroAnim(){
+  spawnHeroShapes();
+  if(!heroRafId) heroRafId = requestAnimationFrame(animateHeroShapes);
+}
+if(window._preloadDone){ startHeroAnim(); }
+else window.addEventListener("preload-done", startHeroAnim, {once:true});
+
+// ============ 键入动画 ============
+const typingStr = "Hello!I am Baiwo!";
+const typeColors = ["#87CEEB","#FFB6C1","#FFA500"];
+const typingEl = document.getElementById("typing-text");
+const cursorEl = document.getElementById("typing-cursor");
+let charIdx = 0;
+
+function typeChar(){
+  if(charIdx >= typingStr.length){
+    cursorEl.style.display = "none";
+    return;
+  }
+  const span = document.createElement("span");
+  span.textContent = typingStr[charIdx];
+  span.style.color = typeColors[charIdx % typeColors.length];
+  span.style.fontWeight = "700";
+  span.style.marginRight = "4px";
+  typingEl.appendChild(span);
+  charIdx++;
+  setTimeout(typeChar, 120 + Math.random()*80);
+}
+if(window._preloadDone) setTimeout(typeChar, 600);
+else window.addEventListener("preload-done", ()=> setTimeout(typeChar, 600));
+
+let mainInited = false;
+
+// ============ 图片悬停旋转+点击跳转 ============
+const charUrls = ['https://kamiina-botan.com/','https://kamiina-botan.com/'];
+document.querySelectorAll('.char-img').forEach((img,i)=>{
+  img.style.cursor = 'pointer';
+  img.addEventListener('click',()=> window.open(charUrls[i],'_blank'));
+  img.addEventListener('mouseenter',()=>{
+    const dir = Math.random() > 0.5 ? 1 : -1;
+    img.style.transform = `rotate(${dir * 10}deg)`;
+  });
+  img.addEventListener('mouseleave',()=>{
+    img.style.transform = 'rotate(0deg)';
+  });
+});
+
+// ============ 斜向字幕条 ============
+const nameLeft = "上伊那ぼたん";
+const nameRight = "砺波 いぶき";
+
+function fillMarquee(el, text){
+  el.textContent = (text + "       ").repeat(12);
+}
+fillMarquee(document.getElementById("mq-l1"), nameLeft);
+fillMarquee(document.getElementById("mq-l2"), nameLeft);
+fillMarquee(document.getElementById("mq-r1"), nameRight);
+fillMarquee(document.getElementById("mq-r2"), nameRight);
+
+// ============ 个人介绍 ============
+const introText = "你好，我是白沃ww（BaiWo），正如你所见，我最近沉迷于百合动漫，所以这个网站的主题暂时是这样的，也非常欢迎你来看看这些动漫（点击图片即可进入对应官网哦），我也会玩各种游戏（真的是各种，很多很多种），我现在居住在上海，目前做一些生物信息和智能体构建方面的差事，很高兴认识你！";
+const introColors = ["#FFB6C1","#87CEEB","#FFA500"];
+const introEl = document.getElementById("intro");
+
+const segments = introText.split(/(?<=[，。])/);
+segments.forEach(seg=>{
+  if(!seg.trim()) return;
+  const line = document.createElement("div");
+  line.className = "intro-line";
+  line.textContent = seg.trim();
+  line.style.color = introColors[Math.floor(Math.random()*introColors.length)];
+  introEl.appendChild(line);
+});
+
+// ============ 像素块BaiWo（含物理系统） ============
+const pixelTitle = document.getElementById("pixel-title");
+const letterMaps = {
+  B:[[0,1,1,1,1,1,0,0],[0,1,1,0,0,1,1,0],[0,1,1,0,0,1,1,0],[0,1,1,1,1,1,0,0],[0,1,1,0,0,1,1,0],[0,1,1,0,0,1,1,0],[0,1,1,1,1,1,0,0]],
+  a:[[0,1,1,1,0],[1,1,0,1,1],[1,1,0,1,1],[1,1,1,1,1],[1,1,0,1,1],[1,1,0,1,1],[1,1,0,1,1]],
+  i:[[0,1,1,0],[0,0,0,0],[0,1,1,0],[0,1,1,0],[0,1,1,0],[0,1,1,0],[0,1,1,0]],
+  W:[[1,1,0,0,0,0,1,1,0],[1,1,0,0,0,0,1,1,0],[1,1,0,1,1,0,1,1,0],[1,1,0,1,1,0,1,1,0],[1,1,1,1,1,1,1,1,0],[1,1,0,1,1,0,1,1,0],[1,1,0,0,0,0,1,1,0]],
+  o:[[0,1,1,1,1,0],[1,1,0,0,1,1],[1,1,0,0,1,1],[1,1,0,0,1,1],[1,1,0,0,1,1],[1,1,0,0,1,1],[0,1,1,1,1,0]]
+};
+const warmColors = ["#FF6B35","#F7C948","#FF4E50","#FC913A","#F9D423","#E8553A","#FFB347","#FF7043","#FFA726","#FF8A65"];
+
+const pixelBlocks = [];
+
+for(const ch of "BaiWo"){
+  const map = letterMaps[ch];
+  const letterDiv = document.createElement("div");
+  letterDiv.className = "pixel-letter";
+  for(const row of map){
+    const rowDiv = document.createElement("div");
+    rowDiv.style.display="flex";rowDiv.style.gap="3px";
+    for(const bit of row){
+      const block = document.createElement("div");
+      block.className="pixel-block";
+      if(bit){
+        block.style.background = warmColors[Math.floor(Math.random()*warmColors.length)];
+        block.style.animationDelay = (Math.random()*2).toFixed(2)+"s";
+        pixelBlocks.push({
+          el: block,
+          ox: 0, oy: 0,
+          vx: 0, vy: 0,
+          dx: 0, dy: 0,
+          floatPhase: Math.random()*Math.PI*2,
+          floatAmp: 1.5 + Math.random()*2
+        });
+      } else {
+        block.style.background="transparent";block.style.animation="none";
+      }
+      rowDiv.appendChild(block);
+    }
+    letterDiv.appendChild(rowDiv);
+  }
+  pixelTitle.appendChild(letterDiv);
+}
+
+// 缓存初始位置
+function cacheBlockPositions(){
+  pixelBlocks.forEach(b=>{
+    const r = b.el.getBoundingClientRect();
+    b.ox = r.left + r.width/2;
+    b.oy = r.top + r.height/2;
+  });
+}
+
+// 爆炸冲击 + 酒瓶生成
+const bottleImgs = [
+  "image/asahi_super_dry-removebg-preview.png",
+  "image/ballantines-removebg-preview.png",
+  "image/chichibu_beer-removebg-preview.png",
+  "image/chichibu_kyoho-removebg-preview.png",
+  "image/chichibu_nishiki-removebg-preview.png",
+  "image/hibiki-removebg-preview.png",
+  "image/hourai_kuramoto-removebg-preview.png",
+  "image/ichiro_malt_grain-removebg-preview.png",
+  "image/kitaya_daiginjo-removebg-preview.png",
+  "image/makers_mark-removebg-preview.png",
+  "image/minami_yamadanishiki-removebg-preview.png",
+  "image/miyagikyo-removebg-preview.png"
+];
+
+const bottles = [];
+const bottleLayer = document.getElementById("bottle-layer");
+const GRAVITY = 0.35;
+const BOUNCE = 0.5;
+const FRICTION = 0.98;
+
+pixelTitle.addEventListener("click",(e)=>{
+  if(pixelBlocks.length === 0) return;
+  if(!pixelBlocks[0].ox) cacheBlockPositions();
+  const cx = e.clientX, cy = e.clientY;
+  pixelBlocks.forEach(b=>{
+    const ddx = b.ox - cx, ddy = b.oy - cy;
+    const dist = Math.sqrt(ddx*ddx + ddy*ddy) || 1;
+    const force = Math.min(18, 3000 / dist);
+    b.vx += (ddx / dist) * force;
+    b.vy += (ddy / dist) * force;
+  });
+
+  // 生成酒瓶
+  const src = bottleImgs[Math.floor(Math.random()*bottleImgs.length)];
+  const img = document.createElement("img");
+  img.src = src;
+  img.className = "bottle-img";
+  const bw = 40 + Math.random()*30;
+  img.style.height = "80px";
+  bottleLayer.appendChild(img);
+  const bottle = {
+    el: img,
+    x: cx - bw/2,
+    y: cy - 40,
+    w: bw,
+    h: 80,
+    vx: (Math.random()-.5)*6,
+    vy: -4 - Math.random()*3,
+    rotation: 0,
+    vr: (Math.random()-.5)*4
+  };
+  bottles.push(bottle);
+  if(bottles.length === 1 && !bottleAnimRunning) animateBottles();
+});
+
+// 物理循环：浮动 + 冲击恢复
+const SPRING = 0.08;
+const DAMPING = 0.88;
+let pixelAnimTime = 0;
+
+function animatePixels(){
+  if(currentPage !== 1){ pixelRafId = null; return; }
+  pixelAnimTime += 0.02;
+  pixelBlocks.forEach(b=>{
+    b.vx += -b.dx * SPRING;
+    b.vy += -b.dy * SPRING;
+    b.vx *= DAMPING;
+    b.vy *= DAMPING;
+    b.dx += b.vx;
+    b.dy += b.vy;
+    const floatY = Math.sin(pixelAnimTime * 1.5 + b.floatPhase) * b.floatAmp;
+    const floatX = Math.cos(pixelAnimTime * 1.2 + b.floatPhase * 1.3) * b.floatAmp * 0.5;
+    b.el.style.transform = `translate(${(b.dx + floatX).toFixed(1)}px,${(b.dy + floatY).toFixed(1)}px)`;
+  });
+  pixelRafId = requestAnimationFrame(animatePixels);
+}
+pixelRafId = requestAnimationFrame(animatePixels);
+
+setTimeout(cacheBlockPositions, 500);
+window.addEventListener("resize", ()=> setTimeout(cacheBlockPositions, 100));
+
+// ============ 酒瓶物理（重力+碰撞） ============
+let scrollFloatTime = 0;
+let bottleAnimRunning = false;
+function animateBottles(){
+  if(currentPage !== 1){ bottleAnimRunning = false; bottleRafId = null; return; }
+  bottleAnimRunning = true;
+  const floorY = window.innerHeight - 10;
+  const wallL = 10, wallR = window.innerWidth - 10;
+
+  // 酒瓶物理
+  for(let i=0;i<bottles.length;i++){
+    const b = bottles[i];
+    b.vy += GRAVITY;
+    b.vx *= FRICTION;
+    b.x += b.vx;
+    b.y += b.vy;
+    b.rotation += b.vr;
+    b.vr *= 0.98;
+
+    if(b.y + b.h > floorY){
+      b.y = floorY - b.h;
+      b.vy = -b.vy * BOUNCE;
+      b.vr *= 0.7;
+      if(Math.abs(b.vy) < 1) b.vy = 0;
+    }
+    if(b.x < wallL){ b.x = wallL; b.vx = -b.vx * BOUNCE; }
+    if(b.x + b.w > wallR){ b.x = wallR - b.w; b.vx = -b.vx * BOUNCE; }
+
+    for(let j=i+1;j<bottles.length;j++){
+      const o = bottles[j];
+      const cx1 = b.x + b.w/2, cy1 = b.y + b.h/2;
+      const cx2 = o.x + o.w/2, cy2 = o.y + o.h/2;
+      const dx = cx2 - cx1, dy = cy2 - cy1;
+      const dist = Math.sqrt(dx*dx + dy*dy) || 1;
+      const minDist = (b.w + o.w)/2;
+      if(dist < minDist){
+        const nx = dx/dist, ny = dy/dist;
+        const overlap = minDist - dist;
+        b.x -= nx*overlap*0.5; b.y -= ny*overlap*0.5;
+        o.x += nx*overlap*0.5; o.y += ny*overlap*0.5;
+        const dvx = b.vx-o.vx, dvy = b.vy-o.vy;
+        const dot = dvx*nx + dvy*ny;
+        if(dot > 0){
+          b.vx -= dot*nx*BOUNCE; b.vy -= dot*ny*BOUNCE;
+          o.vx += dot*nx*BOUNCE; o.vy += dot*ny*BOUNCE;
+        }
+      }
+    }
+
+    // 酒瓶与 ↓ scroll 碰撞
+    if(scrollPhys){
+      const s = scrollPhys;
+      const cx1 = b.x+b.w/2, cy1 = b.y+b.h/2;
+      const cx2 = s.x+s.w/2, cy2 = s.y+s.h/2;
+      const dx = cx2-cx1, dy = cy2-cy1;
+      const dist = Math.sqrt(dx*dx+dy*dy) || 1;
+      const minDist = (b.w+s.w)/2;
+      if(dist < minDist){
+        if(!s.activated) s.activated = true;
+        const nx = dx/dist, ny = dy/dist;
+        const overlap = minDist - dist;
+        b.x -= nx*overlap*0.5; b.y -= ny*overlap*0.5;
+        s.x += nx*overlap*0.5; s.y += ny*overlap*0.5;
+        const dvx = b.vx-s.vx, dvy = b.vy-s.vy;
+        const dot = dvx*nx+dvy*ny;
+        if(dot > 0){
+          b.vx -= dot*nx*BOUNCE; b.vy -= dot*ny*BOUNCE;
+          s.vx += dot*nx*BOUNCE; s.vy += dot*ny*BOUNCE;
+        }
+      }
+    }
+
+    b.el.style.transform = `translate(${b.x.toFixed(0)}px,${b.y.toFixed(0)}px) rotate(${b.rotation.toFixed(1)}deg)`;
+  }
+
+  // ↓ scroll 物理
+  if(scrollPhys){
+    const s = scrollPhys;
+    if(s.activated){
+      s.vy += GRAVITY;
+      s.vx *= FRICTION;
+      s.x += s.vx;
+      s.y += s.vy;
+      s.rotation += s.vr;
+      s.vr *= 0.98;
+      if(s.y + s.h > floorY){
+        s.y = floorY - s.h;
+        s.vy = -s.vy * BOUNCE;
+        s.vr *= 0.7;
+        if(Math.abs(s.vy) < 1) s.vy = 0;
+      }
+      if(s.x < wallL){ s.x = wallL; s.vx = -s.vx * BOUNCE; }
+      if(s.x + s.w > wallR){ s.x = wallR - s.w; s.vx = -s.vx * BOUNCE; }
+    } else {
+      // 未激活：JS模拟hint-float动画（2.5s ease-in-out周期）
+      scrollFloatTime += 0.032;
+      const floatY = Math.sin(scrollFloatTime) * 6;
+      const baseX = window.innerWidth/2 - 60;
+      const baseY = window.innerHeight - 90;
+      s.x = baseX;
+      s.y = baseY + floatY;
+      s.rotation = 0;
+    }
+    s.el.style.transform = `translate(${s.x.toFixed(0)}px,${s.y.toFixed(0)}px) rotate(${s.rotation.toFixed(1)}deg)`;
+  }
+
+  if((bottles.length > 0 || scrollPhys) && currentPage === 1){
+    bottleRafId = requestAnimationFrame(animateBottles);
+  } else {
+    bottleAnimRunning = false;
+    bottleRafId = null;
+  }
+}
+
+// ============ ↓ scroll 物理对象 ============
+const scrollHintP2 = document.getElementById("scroll-hint-p2");
+let scrollPhys = null;
+
+function initScrollPhys(){
+  scrollHintP2.classList.add("show");
+  scrollPhys = {
+    el: scrollHintP2,
+    x: window.innerWidth/2 - 60,
+    y: window.innerHeight - 90,
+    w: 120,
+    h: 36,
+    vx: 0,
+    vy: 0,
+    rotation: 0,
+    vr: 0,
+    activated: false,
+    floatPhase: 0
+  };
+  if(bottles.length === 0 && !bottleAnimRunning) animateBottles();
+}
+
+// ============ 第二屏初始化 ============
+function initMainPage(){
+  const zl = document.getElementById("zone-left");
+  const zr = document.getElementById("zone-right");
+  const mc = document.getElementById("main-content");
+  const strips = document.querySelectorAll(".marquee-strip");
+
+  setTimeout(()=>{
+    zl.classList.add("slide-in");
+    zr.classList.add("slide-in");
+    mc.classList.add("visible");
+    strips.forEach(s=> s.classList.add("show"));
+    initScrollPhys();
+  },200);
+  setTimeout(()=>{
+    zl.classList.add("shrink");
+    zr.classList.add("shrink");
+  },1500);
+}
+
+// ↓ scroll 状态管理：idle(浮动) → activated(物理) → clickable(可点击重置) → idle(重置后)
+let scrollState = "idle";
+
+function resetMainPage(){
+  const zl = document.getElementById("zone-left");
+  const zr = document.getElementById("zone-right");
+  const mc = document.getElementById("main-content");
+  const strips = document.querySelectorAll(".marquee-strip");
+
+  bottles.forEach(b=> b.el.remove());
+  bottles.length = 0;
+
+  if(scrollPhys){
+    scrollPhys.x = window.innerWidth/2 - 60;
+    scrollPhys.y = window.innerHeight - 90;
+    scrollPhys.vx = 0;
+    scrollPhys.vy = 0;
+    scrollPhys.rotation = 0;
+    scrollPhys.vr = 0;
+    scrollPhys.activated = false;
+  }
+
+  scrollHintP2.style.cursor = "default";
+  scrollHintP2.style.pointerEvents = "none";
+  scrollState = "idle";
+
+  zl.classList.remove("slide-in","shrink");
+  zr.classList.remove("slide-in","shrink");
+  strips.forEach(s=> s.classList.remove("show"));
+  mc.classList.remove("visible");
+
+  setTimeout(()=>{
+    zl.classList.add("slide-in");
+    zr.classList.add("slide-in");
+    mc.classList.add("visible");
+    strips.forEach(s=> s.classList.add("show"));
+  },300);
+  setTimeout(()=>{
+    zl.classList.add("shrink");
+    zr.classList.add("shrink");
+  },1800);
+}
+
+scrollHintP2.addEventListener("click",()=>{
+  if(scrollState === "clickable") resetMainPage();
+});
+
+function checkScrollState(){
+  if(currentPage !== 1){ scrollStateRafId = null; return; }
+  if(scrollPhys){
+    if(scrollState === "idle" && scrollPhys.activated){
+      scrollState = "activated";
+    }
+    if(scrollState === "activated" && Math.abs(scrollPhys.vy) < 0.5 && Math.abs(scrollPhys.vx) < 0.5){
+      scrollState = "clickable";
+      scrollHintP2.style.cursor = "pointer";
+      scrollHintP2.style.pointerEvents = "auto";
+    }
+  }
+  scrollStateRafId = requestAnimationFrame(checkScrollState);
+}
+scrollStateRafId = requestAnimationFrame(checkScrollState);
+
+// ============ 第三屏：Tab 逻辑 ============
+let page3Inited = false;
+let currentTab = -1;
+const tabCards = document.querySelectorAll(".tab-card");
+const tabDots = document.querySelectorAll(".tab-dot");
+const tabChars = document.querySelectorAll(".tab-char-wrap");
+const totalTabs = tabCards.length;
+let tabAnimRunning = false;
+
+const tabBodyContent = [
+  "我玩各种游戏——从独立像素风到3A大作，从视觉小说到硬核动作RPG。最近在玩鸣潮和绝区零，沉浸式开放世界探索根本停不下来。Steam 库存常年三位数，switch 卡带堆了一抽屉。",
+  "动画是生活的一部分。日常系、治愈系、百合、奇幻……什么都看。这个季度在看《与你相恋到生命尽头》《花织同学转生后还是想干架》《才女的侍从》等，每一部都有独特的魅力。追番之余也爱翻原作漫画。",
+  "在构建各种智能体——从需求拆解（D-D-Agent，多专家集群 x 多轮澄清）到追番助手（Anime-Assistant），从爬虫生成器到知识问答。大模型 + LangGraph + 工具链的组合让不可能变成可能，每天都在探索新边界。",
+  "本科生物方向，现做生物信息。从基因组组装到蛋白质结构预测，从种群遗传学到系统发育树，数据驱动的生物学模型总能给我惊喜。牛蛙的模型反而预测牛蛙不准，这种反直觉的发现最有趣。",
+  "喜欢造各种小工具：桌面图标管理（desk_manage）、音量悬浮球（volume_control）、SSH连接管理器（SSH_MCP）、端口管理器（port-manager）、局域网待办同步（share_writing_window）……能用代码解决的问题绝不手动。每个小软件都是一次快速原型的快乐实验。"
+];
+
+tabCards.forEach((card, i) => {
+  const body = card.querySelector(".tab-body");
+  if(body) body.textContent = tabBodyContent[i];
+});
+
+function hideAllTabs(){
+  tabChars.forEach(ch => { ch.classList.remove("show"); ch.style.opacity = "0"; ch.style.transform = "translateX(-20px)"; ch.style.pointerEvents = "none"; });
+  tabCards.forEach(card => { card.style.opacity = "0"; card.style.pointerEvents = "none"; card.classList.remove("card-open"); card.style.zIndex = "0"; });
+  tabDots.forEach(dot => { dot.classList.remove("active"); dot.style.opacity = "0"; dot.style.transform = "scale(0)"; });
+}
+
+function layoutBackgroundTabs(activeIdx){
+  tabCards.forEach((card, i) => {
+    if(i === activeIdx) return;
+    const offset = i - activeIdx;
+    const absOff = Math.abs(offset);
+    const dir = offset > 0 ? 1 : offset < 0 ? -1 : 0;
+    const tx = dir * (80 + absOff * 40);
+    const sc = 1 - absOff * 0.08;
+    const ry = -dir * 12;
+    card.style.transform = `translateX(${tx}px) scale(${Math.max(0.7, sc)}) rotateY(${ry}deg)`;
+    card.style.opacity = absOff <= 2 ? String(1 - absOff * 0.3) : "0";
+    card.style.zIndex = String(totalTabs - absOff);
+    card.style.pointerEvents = "none";
+  });
+}
+
+function spawnStars(charWrap){
+  const rect = charWrap.getBoundingClientRect();
+  const count = 3 + Math.floor(Math.random() * 3);
+  const stars = [];
+  for(let i = 0; i < count; i++){
+    const star = document.createElement("div");
+    star.className = "anim-star";
+    star.textContent = "\u2B50";
+    const sx = rect.left + rect.width * (0.3 + Math.random() * 0.4);
+    const sy = rect.top + rect.height * (0.05 + Math.random() * 0.2);
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 30 + Math.random() * 50;
+    star.style.left = sx + "px";
+    star.style.top = sy + "px";
+    star.style.opacity = "1";
+    star.style.transition = "transform .8s ease-out, opacity .8s ease-out";
+    document.body.appendChild(star);
+    requestAnimationFrame(() => {
+      star.style.transform = `translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist}px)`;
+      star.style.opacity = "0";
+    });
+    stars.push(star);
+  }
+  setTimeout(() => { stars.forEach(s => s.remove()); }, 1000);
+}
+
+function spawnHeartAndAnimate(charWrap, cardEl, callback){
+  const charRect = charWrap.getBoundingClientRect();
+  const cardRect = cardEl.getBoundingClientRect();
+  const startX = charRect.left + charRect.width / 2 - 12;
+  const startY = charRect.top - 40;
+  const headY = charRect.top + charRect.height * 0.15;
+  const endX = cardRect.left + 20;
+  const endY = cardRect.top + 20;
+
+  const heart = document.createElement("div");
+  heart.className = "anim-heart";
+  heart.textContent = "\u2764";
+  heart.style.color = "#FF6B6B";
+  heart.style.left = startX + "px";
+  heart.style.top = startY + "px";
+  heart.style.opacity = "1";
+  document.body.appendChild(heart);
+
+  let t = 0;
+  const fallDur = 300;
+  const arcDur = 400;
+  const startTime = performance.now();
+
+  function animHeart(now){
+    const elapsed = now - startTime;
+    if(elapsed < fallDur){
+      const p = elapsed / fallDur;
+      const y = startY + (headY - startY) * p;
+      heart.style.top = y + "px";
+      requestAnimationFrame(animHeart);
+    } else if(elapsed < fallDur + arcDur){
+      const p = (elapsed - fallDur) / arcDur;
+      const cx1 = startX, cy1 = headY;
+      const cx2 = endX, cy2 = endY;
+      const cpx = (cx1 + cx2) / 2 - 60;
+      const cpy = Math.min(cy1, cy2) - 80;
+      const x = (1-p)*(1-p)*cx1 + 2*(1-p)*p*cpx + p*p*cx2;
+      const y = (1-p)*(1-p)*cy1 + 2*(1-p)*p*cpy + p*p*cy2;
+      heart.style.left = x + "px";
+      heart.style.top = y + "px";
+      requestAnimationFrame(animHeart);
+    } else {
+      heart.remove();
+      if(callback) callback();
+    }
+  }
+  requestAnimationFrame(animHeart);
+}
+
+let charBounceAnim = null;
+let charBounceTarget = null;
+
+function startCharBounce(charWrap){
+  stopCharBounce();
+  charBounceTarget = charWrap;
+  const img = charWrap.querySelector(".tab-char-img");
+  if(!img) return;
+  let t = 0;
+  function bounce(){
+    t += 0.04;
+    const dy = Math.sin(t * 2) * 6;
+    img.style.transform = `translateY(${dy}px)`;
+    charBounceAnim = requestAnimationFrame(bounce);
+  }
+  charBounceAnim = requestAnimationFrame(bounce);
+}
+
+function stopCharBounce(){
+  if(charBounceAnim) cancelAnimationFrame(charBounceAnim);
+  charBounceAnim = null;
+  if(charBounceTarget){
+    const img = charBounceTarget.querySelector(".tab-char-img");
+    if(img) img.style.transform = "";
+    charBounceTarget = null;
+  }
+}
+
+function playTabAnimation(idx){
+  if(tabAnimRunning) return;
+  tabAnimRunning = true;
+  hideAllTabs();
+  layoutBackgroundTabs(idx);
+
+  const charWrap = tabChars[idx];
+  const card = tabCards[idx];
+  const nameEl = charWrap.querySelector(".tab-char-name");
+  const imgEl = charWrap.querySelector(".tab-char-img");
+
+  const containerRect = document.querySelector(".tabs-container").getBoundingClientRect();
+  const charZoneRect = charWrap.parentElement.getBoundingClientRect();
+
+  card.style.zIndex = String(totalTabs);
+  card.style.transform = "translateX(0) scale(1) rotateY(0deg)";
+
+  // Phase 1: 角色名字幕条在中间横向出现 (0-400ms)
+  charWrap.style.opacity = "1";
+  charWrap.style.pointerEvents = "auto";
+  charWrap.classList.remove("show");
+  charWrap.style.transform = "translateX(0)";
+  imgEl.style.opacity = "0";
+  imgEl.style.transform = "translateY(100%)";
+  nameEl.style.top = "45%";
+  nameEl.style.transform = "rotate(0deg) scale(1)";
+  nameEl.style.fontSize = "4rem";
+
+  // Phase 2: 角色图片从下方插入, 名字倾斜上移 (400-1100ms)
+  setTimeout(() => {
+    imgEl.style.transition = "transform .7s cubic-bezier(.25,1,.5,1), opacity .7s ease";
+    imgEl.style.opacity = "1";
+    imgEl.style.transform = "translateY(0)";
+    nameEl.style.transition = "all .7s cubic-bezier(.25,1,.5,1)";
+    nameEl.style.top = "10%";
+    nameEl.style.transform = "rotate(-30deg) scale(0.7)";
+    nameEl.style.fontSize = "2.8rem";
+  }, 400);
+
+  // Phase 3: 角色图片上下跳动 + 发散⭐ (1100-1800ms)
+  setTimeout(() => {
+    imgEl.style.transition = "";
+    startCharBounce(charWrap);
+    spawnStars(charWrap);
+  }, 1100);
+
+  // Phase 4: 角色移至最终位置, 停止跳动 (1800-2200ms)
+  setTimeout(() => {
+    stopCharBounce();
+    charWrap.classList.add("show");
+    charWrap.style.transform = "";
+    charWrap.style.opacity = "";
+    nameEl.style.transition = "";
+  }, 1800);
+
+  // Phase 5: 爱心从角色正上方生成下落, 碰撞头部后弧线到卡片左上角 (2200-2900ms)
+  setTimeout(() => {
+    spawnHeartAndAnimate(charWrap, card, () => {
+      // Phase 6: 内容卡展开 + 圆点快速依次出现
+      card.style.transition = "clip-path .6s cubic-bezier(.25,1,.5,1), transform .5s cubic-bezier(.25,1,.5,1), opacity .4s ease";
+      card.classList.add("card-open");
+      card.style.opacity = "1";
+      card.style.pointerEvents = "auto";
+
+      tabDots.forEach((dot, i) => {
+        dot.style.opacity = "0";
+        dot.style.transform = "scale(0)";
+        dot.style.transition = "opacity .3s ease, transform .3s ease";
+        setTimeout(() => {
+          dot.style.opacity = i === idx ? "1" : ".4";
+          dot.style.transform = i === idx ? "scale(1.3)" : "scale(1)";
+          if(i === idx) dot.classList.add("active");
+        }, i * 50);
+      });
+
+      setTimeout(() => {
+        tabAnimRunning = false;
+      }, 400);
+    });
+  }, 2200);
+}
+
+function switchTab(idx){
+  if(idx < 0 || idx >= totalTabs || idx === currentTab || tabAnimRunning) return;
+  currentTab = idx;
+  stopCharBounce();
+  playTabAnimation(idx);
+}
+
+tabDots.forEach(dot => {
+  dot.addEventListener("click", () => {
+    switchTab(parseInt(dot.dataset.tab));
+  });
+});
+
+tabCards.forEach(card => {
+  card.addEventListener("click", () => {
+    const idx = parseInt(card.dataset.tab);
+    if(idx !== currentTab) switchTab(idx);
+  });
+});
+
+let tabDragStartX = 0;
+let tabDragging = false;
+const tabsContainer = document.querySelector(".tabs-container");
+
+tabsContainer.addEventListener("mousedown", (e) => {
+  if(tabAnimRunning) return;
+  tabDragStartX = e.clientX;
+  tabDragging = true;
+});
+window.addEventListener("mouseup", (e) => {
+  if(!tabDragging) return;
+  tabDragging = false;
+  const diff = tabDragStartX - e.clientX;
+  if(Math.abs(diff) > 60){
+    if(diff > 0 && currentTab < totalTabs - 1) switchTab(currentTab + 1);
+    else if(diff < 0 && currentTab > 0) switchTab(currentTab - 1);
+  }
+});
+
+tabsContainer.addEventListener("touchstart", (e) => {
+  if(tabAnimRunning) return;
+  tabDragStartX = e.touches[0].clientX;
+  tabDragging = true;
+}, {passive: true});
+window.addEventListener("touchend", (e) => {
+  if(!tabDragging) return;
+  tabDragging = false;
+  const diff = tabDragStartX - e.changedTouches[0].clientX;
+  if(Math.abs(diff) > 60){
+    if(diff > 0 && currentTab < totalTabs - 1) switchTab(currentTab + 1);
+    else if(diff < 0 && currentTab > 0) switchTab(currentTab - 1);
+  }
+}, {passive: true});
+
+function initPage3(){
+  document.querySelectorAll(".tab-char-scroll").forEach(el => {
+    const text = el.textContent + "       ";
+    el.textContent = text.repeat(8);
+  });
+  // 首次加载直接显示最终状态，跳过长动画
+  const charWrap = tabChars[0];
+  const card = tabCards[0];
+  charWrap.style.opacity = "1";
+  charWrap.style.pointerEvents = "auto";
+  charWrap.classList.add("show");
+  card.style.cssText = "z-index:5;transform:translateX(0) scale(1) rotateY(0deg);opacity:1;pointer-events:auto;transition:none";
+  card.classList.add("card-open");
+  tabDots.forEach((dot, i) => {
+    dot.style.opacity = i === 0 ? "1" : ".4";
+    dot.style.transform = i === 0 ? "scale(1.3)" : "scale(1)";
+    if(i === 0) dot.classList.add("active");
+  });
+  currentTab = 0;
+  tabAnimRunning = false;
+}
+
+</script>
 </body>
 </html>
